@@ -1,0 +1,25 @@
+/* #include "./includes/malloc.h" */
+
+#include <stdlib.h>
+#include <stdio.h>
+#include <malloc.h>
+
+typedef void *(hook_malloc)(size_t, const void *);
+void	*my_hook_malloc(size_t size, const void *caller)
+{
+  hook_malloc	tmp;
+  tmp = __malloc_hook;
+  void		*ret;
+
+  __malloc_hook = 0;
+  printf("size : %zu\n", size);
+  ret = malloc(size);
+  __malloc_hook = tmp;
+  return (ret);
+}
+int	main()
+{
+  __malloc_hook = my_hook_malloc;
+  malloc(4);
+  /* show_alloc_mem(); */
+}
